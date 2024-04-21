@@ -383,7 +383,7 @@ istream& operator>>(istream& is, BigInt& bigint) {
             for (int i = 1; i < str.getTrueSize(); i++) {
                 if (!isdigit(str.charAt(i))) { // Перевіряємо, чи кожен символ є цифрою
                     flag = false;
-                    cout << "Error: Please enter only digits. Try again: " << endl;
+                    cout << "Потрібно вводити лише цифри. Спробуйте знову: " << endl;
                     break; // Виходимо з циклу, якщо знайдено неправильний символ
                 }
                 else {
@@ -395,7 +395,7 @@ istream& operator>>(istream& is, BigInt& bigint) {
             for (int i = 0; i < str.getTrueSize(); i++) {
                 if (!isdigit(str.charAt(i))) { // Перевіряємо, чи кожен символ є цифрою
                     flag = false;
-                    cout << "Error: Please enter only digits. Try again: " << endl;
+                    cout << "Потрібно вводити лише цифри. Спробуйте знову: " << endl;
                     break; // Виходимо з циклу, якщо знайдено неправильний символ
                 }
                 else {
