@@ -1,10 +1,10 @@
 #include "ArrayBigInt.h"
 #include <iostream>
 
-// Constructor
+// Конструктор
 ArrayBigInt::ArrayBigInt() : BIcount(0) {}
 
-// Addition of objects to the array
+// Додавання об'єктів до масиву
 ArrayBigInt ArrayBigInt::operator+(BigInt& bigint) {
     if (BIcount < Csize) {
         array[BIcount++] = bigint;
@@ -12,15 +12,15 @@ ArrayBigInt ArrayBigInt::operator+(BigInt& bigint) {
     return *this;
 }
 
-// Displaying the entire array using an iterator
+// Відображення всього масиву за допомогою ітератора
 void ArrayBigInt::Show() {
     for (ArrayBigIntIterator it = begin(); it != end(); ++it) {
         cout << *it << endl;
     }
 }
 
-// Getting the sum of all elements in the array
-BigInt ArrayBigInt::sum() {
+// Отримання суми всіх елементів масиву
+BigInt ArrayBigInt::Sum() {
     BigInt result;
     for (ArrayBigIntIterator it = begin(); it != end(); ++it) {
         result = result + *it;
@@ -28,7 +28,7 @@ BigInt ArrayBigInt::sum() {
     return result;
 }
 
-// Iteration methods
+// Ітераційні методи
 ArrayBigIntIterator ArrayBigInt::begin() {
     return ArrayBigIntIterator(array);
 }

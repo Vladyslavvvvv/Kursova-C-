@@ -9,19 +9,19 @@ public:
     int BIcount;
 
 public:
-    // Constructor
+    // Конструктор
     ArrayBigInt();
 
-    // Addition of objects to the array
+    // Відображення всього масиву за допомогою ітератора
     ArrayBigInt operator+(BigInt& bigint);
 
-    // Displaying the entire array using an iterator
+    // Відображення всього масиву за допомогою ітератора
     void Show();
 
-    // Getting the sum of all elements in the array
-    BigInt sum();
+    // Отримання суми всіх елементів масиву
+    BigInt Sum();
 
-    // Iteration methods
+    // Ітераційні методи
     ArrayBigIntIterator begin();
     ArrayBigIntIterator end();
 };

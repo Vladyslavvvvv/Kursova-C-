@@ -1,9 +1,9 @@
 #include "ArrayBigIntIterator.h"
 
-// Constructor
+// Конструктор
 ArrayBigIntIterator::ArrayBigIntIterator(BigInt* startPtr) : ptr(startPtr) {}
 
-// Dereferencing operators
+// Оператори розіменування
 BigInt& ArrayBigIntIterator::operator*() const {
     return *ptr;
 }
@@ -12,7 +12,7 @@ BigInt* ArrayBigIntIterator::operator->() const {
     return ptr;
 }
 
-// Prefix increment and decrement operators
+// Префіксні оператори інкремента та декремента
 ArrayBigIntIterator& ArrayBigIntIterator::operator++() {
     ++ptr;
     return *this;
@@ -23,7 +23,7 @@ ArrayBigIntIterator& ArrayBigIntIterator::operator--() {
     return *this;
 }
 
-// Postfix increment and decrement operators
+// Постфіксні оператори інкременту та декременту
 ArrayBigIntIterator ArrayBigIntIterator::operator++(int) {
     ArrayBigIntIterator temp = *this;
     ++ptr;
@@ -36,7 +36,7 @@ ArrayBigIntIterator ArrayBigIntIterator::operator--(int) {
     return temp;
 }
 
-// Comparison operators
+// Оператори порівняння
 bool ArrayBigIntIterator::operator==(const ArrayBigIntIterator& other) const {
     return ptr == other.ptr;
 }

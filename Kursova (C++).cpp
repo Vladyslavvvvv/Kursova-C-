@@ -28,7 +28,7 @@ int main() {
     array = array + B2;
 
     array.Show();
-    BigInt SUM = array.sum();
+    BigInt SUM = array.Sum();
 
     cout << SUM << endl;
 

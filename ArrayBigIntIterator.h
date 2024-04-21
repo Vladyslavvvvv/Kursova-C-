@@ -6,22 +6,22 @@ private:
     BigInt* ptr;
 
 public:
-    // Constructor
+    // Конструктор
     ArrayBigIntIterator(BigInt* startPtr);
 
-    // Dereferencing operators
+    // Оператори розіменування
     BigInt& operator*() const;
     BigInt* operator->() const;
 
-    // Prefix increment and decrement operators
+    // Префіксні оператори інкремента та декремента
     ArrayBigIntIterator& operator++();
     ArrayBigIntIterator& operator--();
 
-    // Postfix increment and decrement operators
+    // Постфіксні оператори інкременту та декременту
     ArrayBigIntIterator operator++(int);
     ArrayBigIntIterator operator--(int);
 
-    // Comparison operators
+    // Оператори порівняння
     bool operator==(const ArrayBigIntIterator& other) const;
     bool operator!=(const ArrayBigIntIterator& other) const;
 };
