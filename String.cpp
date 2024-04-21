@@ -123,7 +123,7 @@ String& String::operator=(String& other) {
         str = new char[maxLength]; // Виділення нової пам'яті
         copy(other.str, other.str + maxLength, str); // Копіювання рядка
     }
-    return *this;
+   return *this;
 }
 
 // Перевантаження операції = (Переміщення)
@@ -141,9 +141,9 @@ String& String::operator=(String&& other) {
 // Перевантаження операції введення >>
 istream& operator>>(istream& is, String& Str) {
     int maxLength;
-    cout << "Enter the maximum length: ";
+    cout << "Enter the maximum length -1: ";
     // Перевірка на коректне введення числа
-    while (!(is >> maxLength)) {
+    while (!(is >> maxLength) || maxLength <= 0) {
         cout << "Invalid input. Please enter a number: ";
         is.clear();
         is.ignore();

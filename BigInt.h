@@ -33,7 +33,7 @@ public:
 	BigInt& operator=(BigInt& other);
 
 	// Оператор додавання
-	virtual String operator+(String& other) override;
+	BigInt operator+(BigInt& other);
 
 	// Оператор віднімання
 	BigInt operator-(BigInt& other);

@@ -105,8 +105,7 @@ BigInt& BigInt::operator=(BigInt& other) {
 }
 
 // Оператор додавання
-String BigInt::operator+(String& other) {
-    BigInt B2(other);
+BigInt BigInt::operator+(BigInt& other) {
     BigInt result;
 
     long long res1 = arrayToNumber(digits, size);
@@ -114,8 +113,8 @@ String BigInt::operator+(String& other) {
         res1 = res1 - (res1 + res1);
     }
 
-    long long res2 = arrayToNumber(B2.digits, B2.size);
-    if (B2.negative) {
+    long long res2 = arrayToNumber(other.digits, other.size);
+    if (other.negative) {
         res2 = res2 - (res2 + res2);
     }
 
@@ -132,22 +131,7 @@ String BigInt::operator+(String& other) {
     result.size = resultSize;
     result.digits = resultDigits;
 
-    // Перетворення масиву цифр у масив символів
-    char* resultChars = new char[resultSize + 1]; // +1 для завершального нуль-символу
-    for (int i = 0; i < resultSize; ++i) {
-        resultChars[i] = '0' + resultDigits[i];
-    }
-    resultChars[resultSize] = '\0'; // Завершальний нуль-символ
-
-    // Створення об'єкта String із перетвореним масивом символів
-    String s;
-
-    s.str = resultChars;
-
-    s.maxLength = resultSize;
-
-
-    return s;
+    return result;
 }
 
 // Оператор віднімання
