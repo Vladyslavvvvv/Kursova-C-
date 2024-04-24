@@ -16,14 +16,19 @@ public:
 	// Конструктор копіювання
 	BigInt(BigInt& other);
 
+	// Конструктор переміщення
 	BigInt(BigInt&& other);
 
+	// Оператор присвоєння об'єкта BigInt
 	BigInt& operator=(BigInt& other);
 
+	// Оператор присвоєння об'єкта String
 	BigInt& operator=(String& other);
 
+	// Оператор переміщення об'єкта BigInt
 	BigInt& operator=(BigInt&& other);
 
+	// Оператор переміщення об'єкта String
 	BigInt& operator=(String&& other);
 
 	// Реверс масиву символів

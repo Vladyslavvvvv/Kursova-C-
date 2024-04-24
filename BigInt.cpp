@@ -25,6 +25,7 @@ char* BigInt::reverseString(char* Str) {
     return Str;
 }
 
+// Конструктор копіювання
 BigInt::BigInt(BigInt& other) {
     delete[] str; // Звільнення пам'яті об'єкта
     maxLength = other.maxLength; // Оновлення максимальної довжини
@@ -32,6 +33,7 @@ BigInt::BigInt(BigInt& other) {
     copy(other.str, other.str + maxLength, str); // Копіювання рядка
 }
 
+// Конструктор переміщення
 BigInt::BigInt(BigInt&& other) {
     delete[] str; // Звільнення пам'яті об'єкта
     maxLength = other.maxLength; // Оновлення максимальної довжини
@@ -40,7 +42,7 @@ BigInt::BigInt(BigInt&& other) {
     other.maxLength = 0; // Оновлення максимальної довжини у переданому об'єкті
 }
 
-// Оператор присвоєння
+// Оператор присвоєння об'єкта BigInt
 BigInt& BigInt::operator=(BigInt& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
         String::operator=(other); // Викликаємо оператор присвоєння базового класу
@@ -48,6 +50,7 @@ BigInt& BigInt::operator=(BigInt& other) {
     return *this;
 }
 
+// Оператор присвоєння об'єкта String
 BigInt& BigInt::operator=(String& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
         String::operator=(other); // Викликаємо оператор присвоєння базового класу
@@ -55,7 +58,7 @@ BigInt& BigInt::operator=(String& other) {
     return *this;
 }
 
-// Оператор переміщення
+// Оператор переміщення об'єкта BigInt
 BigInt& BigInt::operator=(BigInt&& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
         String::operator=(other); // Викликаємо оператор присвоєння базового класу
@@ -63,6 +66,7 @@ BigInt& BigInt::operator=(BigInt&& other) {
     return *this;
 }
 
+// Оператор переміщення об'єкта String
 BigInt& BigInt::operator=(String&& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
         String::operator=(other); // Викликаємо оператор присвоєння базового класу

@@ -21,6 +21,9 @@ public:
     // Отримання суми всіх елементів масиву
     BigInt Sum();
 
+    // Отримання добутку всіх елементів масиву
+    BigInt Prod();
+
     // Ітераційні методи
     ArrayBigIntIterator begin();
     ArrayBigIntIterator end();
