@@ -4,15 +4,6 @@
 
 using namespace std;
 
-// Метод для доступу до кожного символу
-char String::charAt(int index) {
-    if (index >= 0 && index < strlen(str)) {
-        return str[index];
-    }
-    else {
-        return '\0'; // Повертаємо нульовий символ у випадку невірного індексу
-    }
-}
 
 // Дефолтний конструктор
 String::String() {
@@ -79,13 +70,13 @@ int String::getTrueSize() {
 
 // Перевизначення операції +
 String String::operator+(String& other) {
-    int newLength = getTrueSize() + other.getTrueSize() + 1; // +1 для нуль-термінатора
-    char* newStr = new char[newLength];
+    int newLength = strlen(str) + strlen(other.str) + 1; // Обчислюємо нову довжину рядка
+    char* newStr = new char[newLength + 1]; // +1 для нуль-термінатора
 
-    copy(str, str + maxLength, newStr); // Копіюємо перший рядок
-    copy(other.str, other.str + other.maxLength, newStr + getTrueSize()); // Додаємо другий рядок
+    copy(str, str + strlen(str), newStr); // Копіюємо перший рядок
+    copy(other.str, other.str + strlen(other.str) + 1, newStr + strlen(str)); // Додаємо другий рядок
 
-    return String(newStr, newLength);
+    return String(newStr, newLength); // Повертаємо новий об'єкт String
 }
 
 // Перевантаження операції -

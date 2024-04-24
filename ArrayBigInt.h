@@ -13,7 +13,7 @@ public:
     ArrayBigInt();
 
     // Відображення всього масиву за допомогою ітератора
-    ArrayBigInt operator+(BigInt& bigint);
+    ArrayBigInt Add(BigInt& bigint);
 
     // Відображення всього масиву за допомогою ітератора
     void Show();

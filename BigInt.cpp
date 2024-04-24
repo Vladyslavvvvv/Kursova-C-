@@ -1,411 +1,231 @@
 #include "BigInt.h"
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
-// Дефолтний конструктор
-BigInt::BigInt() : String() {
-    size = 1;
-    digits = new int[size];
-    digits[0] = 0;
-    negative = false;
-}
+using namespace std;
 
-// Конструктор з параметром
-BigInt::BigInt(String& str) {
-    // Отримуємо фактичний розмір рядка
-    size = str.getTrueSize();
-
-    // Виділяємо пам'ять для масиву digits
-    digits = new int[size];
-
-    // Визначаємо, чи є число від'ємним
-    if (str.charAt(0) == '-') {
-        negative = true;
-        // Починаємо перетворення від наступного символу
-        for (int i = 1; i < size; i++) {
-            // Припустимо, що символи в рядку представляють цифри, а не букви
-            digits[i - 1] = str.charAt(i) - '0'; // Конвертація символу в цифру
-        }
-        size--;
+// Метод для доступу до кожного символу
+char BigInt::charAt(int index) {
+    if (index >= 0 && index < strlen(str)) {
+        return str[index];
     }
     else {
-        negative = false;
-        // Заповнюємо масив digits значеннями з рядка str
-        for (int i = 0; i < size; i++) {
-            // Припустимо, що символи в рядку представляють цифри, а не букви
-            digits[i] = str.charAt(i) - '0'; // Конвертація символу в цифру
-        }
+        return '\0'; // Повертаємо нульовий символ у випадку невірного індексу
     }
 }
 
-// Конструктор копіювання
+// Реверс масиву символів
+char* BigInt::reverseString(char* Str) {
+    int len = strlen(Str);
+    for (int i = 0; i < len / 2; ++i) {
+        char temp = Str[i];
+        Str[i] = Str[len - i - 1];
+        Str[len - i - 1] = temp;
+    }
+    return Str;
+}
+
 BigInt::BigInt(BigInt& other) {
-    size = other.size;
+    delete[] str; // Звільнення пам'яті об'єкта
+    maxLength = other.maxLength; // Оновлення максимальної довжини
+    str = new char[maxLength]; // Виділення нової пам'яті
+    copy(other.str, other.str + maxLength, str); // Копіювання рядка
+}
 
-    digits = new int[size];
-    for (int i = 0; i < size; ++i) {
-        digits[i] = other.digits[i];
+BigInt::BigInt(BigInt&& other) {
+    delete[] str; // Звільнення пам'яті об'єкта
+    maxLength = other.maxLength; // Оновлення максимальної довжини
+    str = other.str; // Переміщення вказівника
+    other.str = nullptr; // Нульове значення вказівника у переданому об'єкті
+    other.maxLength = 0; // Оновлення максимальної довжини у переданому об'єкті
+}
+
+// Оператор присвоєння
+BigInt& BigInt::operator=(BigInt& other) {
+    if (this != &other) { // Перевірка на самоприсвоєння
+        String::operator=(other); // Викликаємо оператор присвоєння базового класу
     }
-
-    negative = other.negative;
+    return *this;
 }
 
-// Конструктор переміщення
-BigInt::BigInt(BigInt&& other) : size(0), digits(nullptr) {
-    digits = other.digits;
-    size = other.size;
-    negative = other.negative;
-
-    other.digits = nullptr;
-    other.size = 0;
-    other.negative = false;
-}
-
-// Деструктор
-BigInt::~BigInt() {
-    delete[] digits;
+BigInt& BigInt::operator=(String& other) {
+    if (this != &other) { // Перевірка на самоприсвоєння
+        String::operator=(other); // Викликаємо оператор присвоєння базового класу
+    }
+    return *this;
 }
 
 // Оператор переміщення
 BigInt& BigInt::operator=(BigInt&& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
-        // Звільняємо пам'ять поточного об'єкту
-        delete[] digits;
-        size = 0;
-        negative = false;
-
-        // Переміщуємо дані з іншого об'єкту
-        digits = other.digits;
-        size = other.size;
-        negative = other.negative;
-
-        other.digits = nullptr;
-        other.size = 0;
-        other.negative = false;
+        String::operator=(other); // Викликаємо оператор присвоєння базового класу
     }
     return *this;
 }
 
-// Оператор копіювання
-BigInt& BigInt::operator=(BigInt& other) {
+BigInt& BigInt::operator=(String&& other) {
     if (this != &other) { // Перевірка на самоприсвоєння
-        // Виділяємо пам'ять для нового масиву
-        delete[] digits;
-        size = other.size;
-        digits = new int[size];
-
-        // Копіюємо дані з іншого об'єкту
-        for (int i = 0; i < size; ++i) {
-            digits[i] = other.digits[i];
-        }
-
-        negative = other.negative;
+        String::operator=(other); // Викликаємо оператор присвоєння базового класу
     }
     return *this;
 }
 
 // Оператор додавання
-BigInt BigInt::operator+(BigInt& other) {
-    BigInt result;
+String BigInt::operator+(String& other) {
+    int len1 = strlen(str);
+    int len2 = strlen(other.str);
+    int maxlen = len1 > len2 ? len1 : len2;
 
-    long long res1 = arrayToNumber(digits, size);
-    if (negative) {
-        res1 = res1 - (res1 + res1);
+    char* result = new char[maxlen + 2];
+    int carry = 0;
+    int i = len1 - 1;
+    int j = len2 - 1;
+    int k = 0;
+
+    while (i >= 0 || j >= 0 || carry) {
+        int digit1 = i >= 0 ? str[i] - '0' : 0;
+        int digit2 = j >= 0 ? other.str[j] - '0' : 0;
+        int sum = digit1 + digit2 + carry;
+        result[k++] = sum % 10 + '0';
+        carry = sum / 10;
+        i--;
+        j--;
     }
 
-    long long res2 = arrayToNumber(other.digits, other.size);
-    if (other.negative) {
-        res2 = res2 - (res2 + res2);
-    }
+    result[k] = '\0';
 
-    long long resultNumber = res1 + res2;
-    if (resultNumber < 0) {
-        result.negative = true;
-        resultNumber = abs(resultNumber);
-    }
+    reverseString(result); // Реверс результату
 
-    int* resultDigits;
-    int resultSize;
-    numberToArray(resultNumber, resultDigits, resultSize);
-
-    result.size = resultSize;
-    result.digits = resultDigits;
-
-    return result;
-}
-
-// Оператор віднімання
-BigInt BigInt::operator-(BigInt& other) {
-    BigInt result;
-
-    long long res1 = arrayToNumber(digits, size);
-    if (negative) {
-        res1 = res1 - (res1 + res1);
-    }
-
-    long long res2 = arrayToNumber(other.digits, other.size);
-    if (other.negative) {
-        res2 = res2 - (res2 + res2);
-    }
-
-    long long resultNumber = res1 - res2;
-    if (resultNumber < 0) {
-        result.negative = true;
-        resultNumber = abs(resultNumber);
-    }
-
-    int* resultDigits;
-    int resultSize;
-    numberToArray(resultNumber, resultDigits, resultSize);
-
-    result.size = resultSize;
-    result.digits = resultDigits;
-    return result;
+    return String(result, maxlen + 2);
 }
 
 // Оператор множення
 BigInt BigInt::operator*(BigInt& other) {
-    BigInt result;
+    int len1 = strlen(str);
+    int len2 = strlen(other.str);
+    int maxlen = len1 + len2; // Максимальна можлива довжина результуючого числа
 
-    long long res1 = arrayToNumber(digits, size);
-    if (negative) {
-        res1 = res1 - (res1 + res1);
+    // Виділення пам'яті для результату
+    char* result = new char[maxlen + 1];
+    for (int i = 0; i < maxlen; ++i) {
+        result[i] = '0'; // Ініціалізація всіх цифр результату нулями
     }
+    result[maxlen] = '\0';
 
-    long long res2 = arrayToNumber(other.digits, other.size);
-    if (other.negative) {
-        res2 = res2 - (res2 + res2);
-    }
-
-    long long resultNumber = res1 * res2;
-    if (resultNumber < 0) {
-        result.negative = true;
-        resultNumber = abs(resultNumber);
-    }
-
-    int* resultDigits;
-    int resultSize;
-    numberToArray(resultNumber, resultDigits, resultSize);
-
-    result.size = resultSize;
-    result.digits = resultDigits;
-    return result;
-}
-
-// Оператор ділення
-BigInt BigInt::operator/(BigInt& other) {
-    BigInt result;
-
-    long long res1 = arrayToNumber(digits, size);
-    if (negative) {
-        res1 = res1 - (res1 + res1);
-    }
-
-    long long res2 = arrayToNumber(other.digits, other.size);
-    if (other.negative) {
-        res2 = res2 - (res2 + res2);
-    }
-
-    long long resultNumber = res1 / res2;
-    if (resultNumber < 0) {
-        result.negative = true;
-        resultNumber = abs(resultNumber);
-    }
-
-    int* resultDigits;
-    int resultSize;
-    numberToArray(resultNumber, resultDigits, resultSize);
-
-    result.size = resultSize;
-    result.digits = resultDigits;
-    return result;
-}
-
-// Метод для перетворення масиву цифр в число
-long long BigInt::arrayToNumber(int* digits, int size) {
-    long long result = 0;
-    for (int i = 0; i < size; ++i) {
-        result = result * 10 + digits[i];
-    }
-
-    return result;
-}
-
-// Метод для перетворення числа в масив цифр
-void BigInt::numberToArray(long long number, int*& digits, int& size) {
-    // Знаходимо кількість цифр у числі
-    long long temp = number;
-    size = 0;
-    while (temp != 0) {
-        temp /= 10;
-        size++;
-    }
-
-    // Виділяємо пам'ять для масиву цифр
-    digits = new int[size];
-
-    // Заповнюємо масив цифр
-    temp = number;
-    for (int i = size - 1; i >= 0; --i) {
-        digits[i] = temp % 10;
-        temp /= 10;
-    }
-}
-
-// Оператор менше
-bool BigInt::operator<(BigInt& other) {
-    // Перевіряємо знак
-    if (negative) {
-        return true;
-    }
-    else {
-        return false;
-    }
-
-    // Порівнюємо розміри
-    if (size < other.size) {
-        return true;
-    }
-    else if (size > other.size) {
-        return false;
-    }
-
-    // Якщо розміри однакові, порівнюємо почергово розряди, починаючи з найбільшого
-    for (int i = 0; i < size; ++i) {
-        if (digits[i] < other.digits[i]) {
-            return true;
+    // Обчислення добутку
+    for (int i = len1 - 1; i >= 0; --i) {
+        int carry = 0;
+        for (int j = len2 - 1; j >= 0; --j) {
+            int digit1 = str[i] - '0';
+            int digit2 = other.str[j] - '0';
+            int product = digit1 * digit2 + (result[i + j + 1] - '0') + carry;
+            carry = product / 10;
+            result[i + j + 1] = product % 10 + '0';
         }
-        else if (digits[i] > other.digits[i]) {
-            return false;
-        }
+        result[i] += carry; // Додаємо залишок перенесення до попереднього розряду
     }
 
-    // Якщо всі розряди однакові, числа рівні
-    return false;
+    // Перевірка на нулі на початку
+    int i = 0;
+    while (result[i] == '0') {
+        i++;
+    }
+
+    // Повертаємо результат як BigInt
+    return BigInt(result + i, maxlen + 1);
 }
 
 // Оператор більше
 bool BigInt::operator>(BigInt& other) {
-    // Перевіряємо знак
-    if (negative) {
-        return false;
+    // Перевіряємо довжини об'єктів
+    int len1 = strlen(str);
+    int len2 = strlen(other.str);
+    if (len1 > len2) {
+        return true; // Якщо перший об'єкт має більшу довжину, він більший
     }
-    else {
-        return true;
+    else if (len1 < len2) {
+        return false; // Якщо перший об'єкт має меншу довжину, він менший
     }
-
-    // Порівнюємо розміри
-    if (size > other.size) {
-        return true;
-    }
-    else if (size < other.size) {
-        return false;
-    }
-
-    // Якщо розміри однакові, порівнюємо почергово розряди, починаючи з найбільшого
-    for (int i = 0; i < size; ++i) {
-        if (digits[i] > other.digits[i]) {
+    // Якщо довжини рівні, порівнюємо числові значення
+    for (int i = 0; i < len1; ++i) {
+        if (str[i] > other.str[i]) {
             return true;
         }
-        else if (digits[i] < other.digits[i]) {
+        else if (str[i] < other.str[i]) {
             return false;
         }
     }
+    // Якщо обидва об'єкти рівні
+    return false;
+}
 
-    // Якщо всі розряди однакові, числа рівні
+// Оператор менше
+bool BigInt::operator<(BigInt& other) {
+    // Перевіряємо довжини об'єктів
+    int len1 = strlen(str);
+    int len2 = strlen(other.str);
+    if (len1 < len2) {
+        return true; // Якщо перший об'єкт має меншу довжину, він менший
+    }
+    else if (len1 > len2) {
+        return false; // Якщо перший об'єкт має більшу довжину, він більший
+    }
+    // Якщо довжини рівні, порівнюємо числові значення
+    for (int i = 0; i < len1; ++i) {
+        if (str[i] < other.str[i]) {
+            return true;
+        }
+        else if (str[i] > other.str[i]) {
+            return false;
+        }
+    }
+    // Якщо обидва об'єкти рівні
     return false;
 }
 
 // Оператор рівне
 bool BigInt::operator==(BigInt& other) {
-    // Перевіряємо знак
-    if (negative == other.negative) {
-        return true;
-    }
-    else {
-        return false;
-    }
-
-    // Порівнюємо розміри
-    if (size != other.size) {
-        return false;
-    }
-
-    // Порівнюємо почергово розряди
-    for (int i = 0; i < size; ++i) {
-        if (digits[i] != other.digits[i]) {
-            return false;
-        }
-    }
-
-    // Якщо всі розряди однакові, числа рівні
-    return true;
+    return strcmp(str, other.str) == 0; // Просто порівняння кожного символу
 }
 
 // Оператор не рівне
 bool BigInt::operator!=(BigInt& other) {
-    // Використовуємо вже існуючу реалізацію оператора рівне
-    return !(*this == other);
+    return strcmp(str, other.str) != 0;
 }
 
-// Оператор менше-рівне
-bool BigInt::operator<=(BigInt& other) {
-    // Використовуємо вже існуючі оператори порівняння '<' та '=='
-    return (*this < other) || (*this == other);
-}
-
-// Оператор більше-рівне
+// Оператор більше рівне
 bool BigInt::operator>=(BigInt& other) {
-    // Використовуємо вже існуючі оператори порівняння '>' та '=='
-    return (*this > other) || (*this == other);
+    return strcmp(str, other.str) <= 0;
 }
 
-// Оператор виведення
-ostream& operator<<(ostream& os, BigInt& bigint) {
-    if (bigint.negative) {
-        os << "-";
-    }
-
-    for (int i = 0; i < bigint.size; i++) {
-        os << bigint.digits[i];
-    }
-    return os;
+// Оператор менше рівне
+bool BigInt::operator<=(BigInt& other) {
+    return strcmp(str, other.str) >= 0;
 }
 
-// Оператор введення
+// Перевантаження операції введення >>
 istream& operator>>(istream& is, BigInt& bigint) {
-    String str;
     bool flag = false;
+    long long int maxSize;
 
-    do {
-        is >> str;
-        if (str.charAt(0) == '-') {
-            for (int i = 1; i < str.getTrueSize(); i++) {
-                if (!isdigit(str.charAt(i))) { // Перевіряємо, чи кожен символ є цифрою
-                    flag = false;
-                    cout << "You only need to enter numbers. Try again: " << endl;
-                    break; // Виходимо з циклу, якщо знайдено неправильний символ
-                }
-                else {
-                    flag = true;
-                }
-            }
-        }
-        else {
-            for (int i = 0; i < str.getTrueSize(); i++) {
-                if (!isdigit(str.charAt(i))) { // Перевіряємо, чи кожен символ є цифрою
-                    flag = false;
-                    cout << "You only need to enter numbers. Try again: " << endl;
-                    break; // Виходимо з циклу, якщо знайдено неправильний символ
-                }
-                else {
-                    flag = true;
-                }
-            }
-        }
-    } while (flag == false);
+    cout << "Enter max size of BigInt: ";
+    is >> maxSize;
 
-    bigint = BigInt(str); // Викликаємо конструктор з параметром для ініціалізації bigint
+    char* input = new char[maxSize + 1];
+
+    cout << "Enter BigInt: ";
+    is >> input;
+
+    bigint = BigInt(input, maxSize);
+
+    delete[] input;
 
     return is;
+}
+
+// Перевантаження операції виведення <<
+ostream& operator<<(ostream& os, BigInt& bigint) {
+    os << bigint.str;
+
+    return os;
 }

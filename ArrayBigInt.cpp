@@ -5,7 +5,7 @@
 ArrayBigInt::ArrayBigInt() : BIcount(0) {}
 
 // Додавання об'єктів до масиву
-ArrayBigInt ArrayBigInt::operator+(BigInt& bigint) {
+ArrayBigInt ArrayBigInt::Add(BigInt& bigint) {
     if (BIcount < Csize) {
         array[BIcount++] = bigint;
     }

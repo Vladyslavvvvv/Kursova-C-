@@ -6,49 +6,40 @@
 class BigInt : public String
 {
 public:
-	int* digits;
-	int size;
-	bool negative;
+	// Метод для доступу до кожного символу
+	char charAt(int index);
 
-public:
-	// Дефолтний конструктор
-	BigInt();
+	BigInt(char* str, int maxSize) : String(str, maxSize) {}
 
-	// Конструктор з параметром
-	BigInt(String& str);
+	BigInt() : String() {}
 
 	// Конструктор копіювання
 	BigInt(BigInt& other);
 
-	// конструктор переміщення
 	BigInt(BigInt&& other);
 
-	// Деструктор
-	~BigInt();
-
-	// Перевантаження операції = (Переміщення)
-	BigInt& operator=(BigInt&& other);
-
-	// Перевантаження операції = (Присвоєння)
 	BigInt& operator=(BigInt& other);
 
-	// Оператор додавання
-	BigInt operator+(BigInt& other);
+	BigInt& operator=(String& other);
 
-	// Оператор віднімання
-	BigInt operator-(BigInt& other);
+	BigInt& operator=(BigInt&& other);
+
+	BigInt& operator=(String&& other);
+
+	// Реверс масиву символів
+	char* reverseString(char* Str);
+
+	// Оператор додавання
+	String operator+(String& other) override;
 
 	// Оператор множення
 	BigInt operator*(BigInt& other);
 
-	// Оператор ділення
-	BigInt operator/(BigInt& other);
+	// Оператор більше
+	bool operator>(BigInt& other);
 
 	// Оператор менше
 	bool operator<(BigInt& other);
-
-	// Оператор більше
-	bool operator>(BigInt& other);
 
 	// Оператор рівне
 	bool operator==(BigInt& other);
@@ -56,21 +47,15 @@ public:
 	// Оператор не рівне
 	bool operator!=(BigInt& other);
 
-	// Оператор менше-рівне
-	bool operator<=(BigInt& other);
-
-	// Оператор білше-рівне
+	// Оператор більше рівне
 	bool operator>=(BigInt& other);
 
-	// Метод для перетворення масиву цифр в число
-	long long arrayToNumber(int* digits, int size);
+	// Оператор менше рівне
+	bool operator<=(BigInt& other);
 
-	// Метод для перетворення числа в масив цифр
-	void numberToArray(long long number, int*& digits, int& size);
+	// Перевантаження операції введення >>
+	friend istream& operator>>(istream& is, BigInt& bigint);
 
-	// Оператор виведення
+	// Перевантаження операції виведення <<
 	friend ostream& operator<<(ostream& os, BigInt& bigint);
-
-	// Оператор введення
-	friend istream& operator>>(istream& os, BigInt& bigint);
 };

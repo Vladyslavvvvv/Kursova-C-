@@ -10,9 +10,6 @@ public:
     int maxLength; // Максимальна довжина рядка
 
 public:
-    // Метод для доступу до кожного символу
-    char charAt(int index);
-
     // Дефолтний конструктор
     String();
 
