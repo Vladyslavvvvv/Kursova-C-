@@ -28,15 +28,6 @@ BigInt ArrayBigInt::Sum() {
     return result;
 }
 
-// Отримання добутку всіх елементів масиву
-BigInt ArrayBigInt::Prod() {
-    BigInt result;
-    for (ArrayBigIntIterator it = begin(); it != end(); ++it) {
-        result = result * *it;
-    }
-    return result;
-}
-
 // Ітераційні методи
 ArrayBigIntIterator ArrayBigInt::begin() {
     return ArrayBigIntIterator(array);
