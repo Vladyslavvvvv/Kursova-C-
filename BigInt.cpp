@@ -199,12 +199,12 @@ bool BigInt::operator!=(BigInt& other) {
 
 // Оператор більше рівне
 bool BigInt::operator>=(BigInt& other) {
-    return strcmp(str, other.str) <= 0;
+    return strcmp(str, other.str) >= 0;
 }
 
 // Оператор менше рівне
 bool BigInt::operator<=(BigInt& other) {
-    return strcmp(str, other.str) >= 0;
+    return strcmp(str, other.str) <= 0;
 }
 
 // Перевантаження операції введення >>

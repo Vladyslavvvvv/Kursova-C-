@@ -22,8 +22,9 @@ int main() {
 		cout << "\nRead the array from the file and find the sum - 1" << endl;
 		cout << "Enter the numbers yourself and find the sum - 2" << endl;
 		cout << "Enter the numbers yourself and find the product - 3" << endl;
-		cout << "Demonstrate polymorphism - 4" << endl;
-		cout << "Exit - 5" << endl;
+        cout << "Compare two numbers - 4" << endl;
+		cout << "Demonstrate polymorphism - 5" << endl;
+		cout << "Exit - 6" << endl;
 		cout << "\nYour choice: ";
 		cin >> choice;
 
@@ -141,6 +142,70 @@ int main() {
         }
 
         case 4: {
+            BigInt B1, B2;
+            cout << "BigInt 1" << endl;
+            cin >> B1;
+            cout << "BigInt 2" << endl;
+            cin >> B2;
+
+            bool q1 = B1 > B2;
+            cout << "B1 > B2: ";
+            if (q1 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            bool q2 = B1 < B2;
+            cout << "B1 < B2: ";
+            if (q2 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            bool q3 = B1 == B2;
+            cout << "B1 == B2: ";
+            if (q3 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            bool q4 = B1 >= B2;
+            cout << "B1 >= B2: ";
+            if (q4 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            bool q5 = B1 <= B2;
+            cout << "B1 <= B2: ";
+            if (q5 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            bool q6 = B1 != B2;
+            cout << "B1 != B2: ";
+            if (q6 == true) {
+                cout << "YES" << endl;
+            }
+            else {
+                cout << "NO" << endl;
+            }
+
+            break;
+        }
+
+        case 5: {
             int choice1;
             cout << "\nWhat type of objects should be entered?" << endl;
             cout << "String - 1" << endl;
@@ -175,7 +240,7 @@ int main() {
             break;
         }
 
-        case 5: {
+        case 6: {
             Exit = true;
 
             break;
