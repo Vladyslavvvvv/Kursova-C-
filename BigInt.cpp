@@ -103,6 +103,67 @@ String BigInt::operator+(String& other) {
     return String(result, maxlen + 2);
 }
 
+// Оператор віднімання
+BigInt BigInt::operator-(BigInt& other) {
+    if (*this < other) {
+        cout << "Перше число менше за друге! Програма не може працювати з від'ємними значеннями." << endl;
+        BigInt B1;
+        return B1;
+    }
+    else if (*this == other) {
+        char* ch = new char[2];
+        ch[0] = '0';
+        ch[1] = '\0';
+        BigInt B2(ch, 2);
+        return B2;
+    }
+    else {
+        int len1 = strlen(str);
+        int len2 = strlen(other.str);
+
+        // Визначаємо більшу довжину для вирахування різниці
+        int maxlen = len1 > len2 ? len1 : len2;
+
+        // Виділення пам'яті для результату
+        char* result = new char[maxlen + 1];
+        result[maxlen] = '\0';
+
+        int borrow = 0;
+        int i = len1 - 1;
+        int j = len2 - 1;
+        int k = maxlen - 1;
+
+        // Вирахування різниці цифр
+        while (k >= 0) {
+            int digit1 = i >= 0 ? str[i] - '0' : 0;
+            int digit2 = j >= 0 ? other.str[j] - '0' : 0;
+            int diff = digit1 - digit2 - borrow;
+
+            // Якщо різниця від'ємна, запозичуємо в одиницю від попереднього розряду
+            if (diff < 0) {
+                diff += 10;
+                borrow = 1;
+            }
+            else {
+                borrow = 0;
+            }
+
+            result[k--] = diff + '0';
+            i--;
+            j--;
+        }
+
+        // Перевірка на нулі на початку
+        int idx = 0;
+        while (result[idx] == '0') {
+            idx++;
+        }
+
+        // Повертаємо результат як BigInt
+        return BigInt(result + idx, maxlen - idx + 1);
+    }
+}
+
 // Оператор множення
 BigInt BigInt::operator*(BigInt& other) {
     int len1 = strlen(str);
@@ -137,6 +198,34 @@ BigInt BigInt::operator*(BigInt& other) {
 
     // Повертаємо результат як BigInt
     return BigInt(result + i, maxlen + 1);
+}
+
+// Оператор ділення
+BigInt BigInt::operator/(BigInt& other) {
+    // Ініціалізація результату ділення як нульове BigInt
+    char* b1 = new char[2];
+    b1[0] = '0';
+    b1[1] = '\0';
+    BigInt result(b1, 2);
+
+    char* b2 = new char[2];
+    b2[0] = '1';
+    b2[1] = '\0';
+    BigInt quotient(b2, 2);
+
+    // Копія діленого, яку будемо змінювати
+    BigInt dividend = *this;
+
+    // Поки ділене більше або дорівнює дільнику
+    while (dividend > other) {
+        dividend = dividend - other; // Віднімаємо дільник від діленого
+        result = result + quotient; // Інкрементуємо результат
+    }
+
+    result = result + quotient;
+
+    // Повернення результату ділення
+    return result;
 }
 
 // Оператор більше
@@ -212,13 +301,40 @@ istream& operator>>(istream& is, BigInt& bigint) {
     bool flag = false;
     long long int maxSize;
 
-    cout << "Enter max size of BigInt: ";
-    is >> maxSize;
+    cout << "Введіть максимальний розмір великого цілого числа: ";
+    while (!(is >> maxSize) || maxSize <= 0) {
+        cout << "Неправильний ввід! Введіть ціле число: ";
+        is.clear();
+        is.ignore();
+    }
+
+    maxSize++;
 
     char* input = new char[maxSize + 1];
 
-    cout << "Enter BigInt: ";
+    cout << "Введіть велике ціле число: ";
     is >> input;
+
+    // Перевірка на наявність лише цифр у введеному рядку
+    bool isValid = true;
+    for (int i = 0; input[i] != '\0'; ++i) {
+        if (!isdigit(input[i])) {
+            isValid = false;
+            break;
+        }
+    }
+
+    if (!isValid) {
+        cout << "Неправильний ввід! Введіть ціле число: " << endl;
+        // Звільнення виділеної пам'яті перед виходом з функції
+        delete[] input;
+        // Очищення потоку вводу від неправильних символів
+        is.clear();
+        // Видалення неправильного введення з потоку
+        is.ignore();
+        // Рекурсивний виклик для повторного введення
+        return operator>>(is, bigint);
+    }
 
     bigint = BigInt(input, maxSize);
 

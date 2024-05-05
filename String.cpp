@@ -1,5 +1,6 @@
 #include "String.h"
 #include <cstring>
+#include <windows.h>
 #include <iostream>
 
 using namespace std;
@@ -131,11 +132,12 @@ String& String::operator=(String&& other) {
 
 // Перевантаження операції введення >>
 istream& operator>>(istream& is, String& Str) {
+    SetConsoleCP(1251);
     int maxLength;
-    cout << "Enter the maximum size -1: ";
+    cout << "Введіть максимальний розмір рядка: ";
     // Перевірка на коректне введення числа
     while (!(is >> maxLength) || maxLength <= 0) {
-        cout << "Invalid input. Enter an integer: ";
+        cout << "Неправильний ввід! Введіть ціле число: ";
         is.clear();
         is.ignore();
     }
@@ -143,7 +145,7 @@ istream& operator>>(istream& is, String& Str) {
     maxLength += 1;
 
     char* buffer = new char[maxLength + 1]; // Динамічне виділення буфера
-    cout << "Enter the value: ";
+    cout << "Введіть рядок символів: ";
     is.ignore(); // Пропускаємо символ нового рядка, щоб уникнути конфлікту між методами getline() та >>.
     is.getline(buffer, maxLength + 1); // Зчитування рядка з потоку в буфер
     Str = String(buffer, maxLength + 1); // Створення об'єкта String з буфера
@@ -153,6 +155,6 @@ istream& operator>>(istream& is, String& Str) {
 
 // Перевантаження операції виведення <<
 ostream& operator<<(ostream& os, String& str) {
-    os << "String: " << str.getString() << "\tMax. size: " << str.getLength() << "\tTrue size: " << str.getTrueSize() << endl << endl;
+    os << "Рядок: " << str.getString() << endl << endl;
     return os;
 }

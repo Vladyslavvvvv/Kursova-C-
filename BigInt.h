@@ -37,8 +37,14 @@ public:
 	// Оператор додавання
 	String operator+(String& other) override;
 
+	// Оператор віднімання
+	BigInt operator-(BigInt& other);
+
 	// Оператор множення
 	BigInt operator*(BigInt& other);
+
+	// Оператор множення
+	BigInt operator/(BigInt& other);
 
 	// Оператор більше
 	bool operator>(BigInt& other);

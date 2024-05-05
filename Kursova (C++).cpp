@@ -1,16 +1,18 @@
 ﻿#include "BigInt.h"
 #include "ArrayBigInt.h"
+#include <windows.h>
 #include <fstream>
 
 using namespace std;
 
-// Функція яка демонструє пізнє зв'язування
+// Функція для демонстрації пізнього зв'язування
 String polym(String& left, String& right) {
-    cout << "Polymorphism works!" << endl;
 	return left + right;
 }
 
 int main() {
+    SetConsoleOutputCP(1251);
+
 	ifstream inFile;
 	ofstream outFile;
 	bool Exit = false;
@@ -18,15 +20,18 @@ int main() {
 	do {
 		int choice;
 
-		cout << "\nWhat should be done?" << endl;
-		cout << "\nRead the array from the file and find the sum - 1" << endl;
-		cout << "Enter the numbers yourself and find the sum - 2" << endl;
-		cout << "Enter the numbers yourself and find the product - 3" << endl;
-        cout << "Compare two numbers - 4" << endl;
-		cout << "Demonstrate polymorphism - 5" << endl;
-		cout << "Exit - 6" << endl;
-		cout << "\nYour choice: ";
+		cout << "\nЩо потрібно зробити?" << endl;
+		cout << "\nПрочитати дані з файлу і знайти суму - 1" << endl;
+		cout << "Ввести два числа і знайти суму - 2" << endl;
+        cout << "Ввести два числа і знайти різницю - 3" << endl;
+		cout << "Ввести два числа і знайти добуток - 4" << endl;
+        cout << "Ввести два числа і частку - 5" << endl;
+        cout << "Порівняти два числа - 6" << endl;
+		cout << "Продемонструвати поліморфізм - 7" << endl;
+		cout << "Вийти - 8" << endl;
+		cout << "\nВведіть ваш вибір: ";
 		cin >> choice;
+        cout << endl;
 
 		switch (choice) {
 		case 1: {
@@ -35,9 +40,9 @@ int main() {
             int maxLength;
             long long MAX_SIZE;
 
-            cout << "\nEnter how many characters to read from the file: ";
+            cout << "\nСкільки символів потрібно прочитати з файлу: ";
             cin >> MAX_SIZE;
-            cout << "Enter the maximum number size: ";
+            cout << "Який максимальний розмір числа у цьому файлі: ";
             cin >> maxLength;
 
             char* currentNumber = new char[maxLength];
@@ -48,14 +53,14 @@ int main() {
             // Відкриття файлу для читання
             inFile.open("C:\\Users\\acer\\OneDrive\\Робочий стіл\\2 курс\\Курсова\\Source.txt");
             if (!inFile) {
-                cout << "Could not open file for reading!" << endl;
+                cout << "Не вийшло відкрити файл для читання!" << endl;
                 break;
             }
 
             // Відкриття файлу для запису
             outFile.open("C:\\Users\\acer\\OneDrive\\Робочий стіл\\2 курс\\Курсова\\Result.txt");
             if (!outFile) {
-                cout << "Could not open file for writing!" << endl;
+                cout << "Не вийшло відкрити файл для запису!" << endl;
                 break;
             }
 
@@ -77,8 +82,11 @@ int main() {
 
             BigInt SUM = ARRAY.Sum();
 
+            // 
+            cout << "Сума = " << SUM << endl;
+
             // Запис суми у файл
-            outFile << "Sum = " << SUM << endl;
+            outFile << "Сума = " << SUM << endl;
 
             delete[] currentNumber;
             delete[] line;
@@ -86,168 +94,128 @@ int main() {
             outFile.close();
             inFile.close();
 
-            cout << "The sum of the numbers is written to the file!" << endl;
+            cout << "Сума чисел записана у файл!" << endl;
 
             break;
 		}
 
         case 2: {
-            int size, count = 0, ix = 1;
+            BigInt B1, B2, B3;
 
-            ArrayBigInt ARRAY;
+            cout << "Введіть перше число" << endl;
+            cin >> B1;
 
-            cout << "\nHow many numbers to enter: ";
-            cin >> size;
+            cout << "Введіть друге число" << endl;
+            cin >> B2;
 
-            while (count < size) {
-                BigInt B;
-                cout << "Digit (" << ix << ")" << ": " << endl;
-                ix++;
-                cin >> B;
-                ARRAY.Add(B);
-                count++;
-            }
+            B3 = B1 + B2;
 
-            BigInt SUM = ARRAY.Sum();
+            cout << "Сума = " << B3 << endl;
 
-            // Відкриття файлу для запису
-            outFile.open("C:\\Users\\acer\\OneDrive\\Робочий стіл\\2 курс\\Курсова\\Result.txt");
-            if (!outFile) {
-                cout << "Could not open file for writing!" << endl;
-                break;
-            }
+            break;
+        }
 
-            // Запис суми у файл
-            outFile << "Sum = " << SUM << endl;
+        case 3: {
+            BigInt B1, B2, B3;
 
-            outFile.close();
+            cout << "Введіть перше число" << endl;
+            cin >> B1;
 
-            cout << "The sum of your numbers is recorded in a file!" << endl;
+            cout << "Введіть друге число" << endl;
+            cin >> B2;
+
+            B3 = B1 - B2;
+
+            cout << "Різниця = " << B3 << endl;
 
             break;
         }
               
-        case 3: {
+        case 4: {
             BigInt B1, B2, B3;
-            cout << "BigInt 1" << endl;
+            cout << "Введіть перше число" << endl;
             cin >> B1;
-            cout << "BigInt 2" << endl;
+            cout << "Введіть друге число" << endl;
             cin >> B2;
 
             B3 = B1 * B2;
 
-            cout << "Product: " << B3 << endl;
-
-            break;
-        }
-
-        case 4: {
-            BigInt B1, B2;
-            cout << "BigInt 1" << endl;
-            cin >> B1;
-            cout << "BigInt 2" << endl;
-            cin >> B2;
-
-            bool q1 = B1 > B2;
-            cout << "B1 > B2: ";
-            if (q1 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
-
-            bool q2 = B1 < B2;
-            cout << "B1 < B2: ";
-            if (q2 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
-
-            bool q3 = B1 == B2;
-            cout << "B1 == B2: ";
-            if (q3 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
-
-            bool q4 = B1 >= B2;
-            cout << "B1 >= B2: ";
-            if (q4 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
-
-            bool q5 = B1 <= B2;
-            cout << "B1 <= B2: ";
-            if (q5 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
-
-            bool q6 = B1 != B2;
-            cout << "B1 != B2: ";
-            if (q6 == true) {
-                cout << "YES" << endl;
-            }
-            else {
-                cout << "NO" << endl;
-            }
+            cout << "Добуток = " << B3 << endl;
 
             break;
         }
 
         case 5: {
-            int choice1;
-            cout << "\nWhat type of objects should be entered?" << endl;
-            cout << "String - 1" << endl;
-            cout << "BigInt - 2" << endl;
-            cout << "Your choice: ";
-            cin >> choice1;
+            BigInt B1, B2, B3;
+            cout << "Введіть перше число" << endl;
+            cin >> B1;
+            cout << "Введіть друге число" << endl;
+            cin >> B2;
 
-            switch (choice1) {
-            case 1: {
-                String S1, S2;
-                cout << "\nString 1: ";
-                cin >> S1;
-                cout << "String 2: ";
-                cin >> S2;
-                polym(S1, S2);
+            B3 = B1 / B2;
 
-                break;
+            cout << "Частка (заокруглена до більшого) = " << B3 << endl;
+
+            break;
+        }
+              
+        case 6: {
+            BigInt B1, B2;
+            cout << "Введіть перше число" << endl;
+            cin >> B1;
+            cout << "Введіть друге число" << endl;
+            cin >> B2;
+
+            if (B1 > B2) {
+                cout << "Перше число більше за друге" << endl;
             }
-
-            case 2: {
-                BigInt B1, B2;
-                cout << "\nBigInt 1: ";
-                cin >> B1;
-                cout << "BigInt 2: ";
-                cin >> B2;
-                polym(B1, B2);
-
-                break;
+            else if (B1 < B2) {
+                cout << "Перше число менше за друге" << endl;
             }
+            else if (B1 == B2) {
+                cout << "Числа рівні" << endl;
             }
 
             break;
         }
 
-        case 6: {
+        case 7: {
+            BigInt B1;
+            String S2, S3;
+
+            cout << "Введіть велике ціле число" << endl;
+            cin >> B1;
+
+            cout << "Введіть рядок символів" << endl;
+            cin >> S2;
+
+            cout << "\nВиклик функції для праметрів BigInt і String: ";
+            S3 = polym(B1, S2);
+            cout << S3;
+
+            cout << "Виклик функції для праметрів String і BigInt: ";
+            S3 = polym(S2, B1);
+            cout << S3;
+
+            cout << "Виклик функції для праметрів BigInt і BigInt: ";
+            S3 = polym(B1, B1);
+            cout << S3;
+
+            cout << "Виклик функції для праметрів String і String: ";
+            S3 = polym(S2, S2);
+            cout << S3;
+
+            break;
+        }
+
+        case 8: {
             Exit = true;
 
             break;
         }
 
         default: {
-            cout << "Wrong choice. Try again!" << endl;
+            cout << "\nНеправильний вибір! Спробуйте знову." << endl;
 
             break;
         }
