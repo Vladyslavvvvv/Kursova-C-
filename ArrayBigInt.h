@@ -4,7 +4,7 @@
 
 class ArrayBigInt : BigInt {
 public:
-    static const int Csize = 1000;
+    static const int Csize = 10000;
     BigInt array[Csize];
     int BIcount;
 

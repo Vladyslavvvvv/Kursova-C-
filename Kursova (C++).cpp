@@ -1,11 +1,13 @@
 ﻿#include "BigInt.h"
 #include "ArrayBigInt.h"
+#include <string>
+#include <iostream>
 #include <windows.h>
 #include <fstream>
 
 using namespace std;
 
-// Функція для демонстрації пізнього зв'язування
+// Допоміжна функція для демонстрації пізнього зв'язування
 String polym(String& left, String& right) {
 	return left + right;
 }
@@ -38,7 +40,7 @@ int main() {
             int currentIndex = 0; // Індекс поточного символу в масиві поточного числа
 
             int maxLength;
-            long long MAX_SIZE;
+            long long int MAX_SIZE;
 
             cout << "\nСкільки символів потрібно прочитати з файлу: ";
             cin >> MAX_SIZE;
@@ -64,6 +66,8 @@ int main() {
                 break;
             }
 
+            bool stop = false;
+
             // Читання рядка з файлу
             if (inFile.getline(line, MAX_SIZE)) {
                 for (int i = 0; line[i] != '\0'; ++i) {
@@ -77,24 +81,42 @@ int main() {
 
                         currentIndex = 0; // Скидаємо індекс для наступного числа
                     }
+                    else {
+                        cout << "Помилка! У файлі є символи що не є цифрами." << endl;
+                        stop = true;
+                        break;
+                    }
+                }
+                // Додавання останнього числа
+                if (currentIndex > 0 && !stop) {
+                    currentNumber[currentIndex] = '\0'; // Додаємо завершувальний символ
+                    BigInt BIGINT(currentNumber, maxLength);
+                    ARRAY.Add(BIGINT);
+
+                    currentIndex = 0; // Скидаємо індекс для наступного числа
                 }
             }
 
-            BigInt SUM = ARRAY.Sum();
+            if (!stop) {
+                BigInt SUM = ARRAY.Sum();
 
-            // 
-            cout << "Сума = " << SUM << endl;
+                cout << "Сума = " << SUM << endl;
 
-            // Запис суми у файл
-            outFile << "Сума = " << SUM << endl;
+                // Запис суми у файл
+                outFile << "Сума = " << SUM << endl;
 
-            delete[] currentNumber;
-            delete[] line;
+                delete[] currentNumber;
+                delete[] line;
 
-            outFile.close();
-            inFile.close();
+                outFile.close();
+                inFile.close();
 
-            cout << "Сума чисел записана у файл!" << endl;
+                cout << "Сума чисел записана у файл!" << endl;
+            }
+            else {
+                cout << "Перевірете файл і видаліть символи які не є цифрами." << endl;
+                cout << "Шлях до файлу: C:\\Users\\acer\\OneDrive\\Робочий стіл\\2 курс\\Курсова\\Source.txt" << endl;
+            }
 
             break;
 		}
